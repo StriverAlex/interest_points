@@ -1,0 +1,73 @@
+# 仿真配置（匹配Isaac Sim设置）
+sim:
+  dt: 0.016  # 16ms时间步长（62.5 FPS）
+  substeps: 1  # 子步数
+  gravity: [0, 0, -9.81]  # 重力加速度
+  
+  # 性能设置
+  replicate_physics: false
+  use_flatcache: true  # 启用平坦缓存提升性能
+  use_gpu_pipeline: true  # 启用GPU管道
+  device: "cuda:0"
+  
+  # 物理求解器设置
+  solver_type: 1  # PGS求解器
+  use_gpu: true
+  bounce_threshold_velocity: 0.2
+  friction_offset_threshold: 0.04
+  friction_correlation_distance: 0.025
+  enable_stabilization: true
+  enable_scene_query_support: true
+  
+  # GPU缓冲区设置（为大规模并行训练优化）
+  gpu_max_rigid_contact_count: 1048576  # 增大以支持复杂场景
+  gpu_max_rigid_patch_count: 262144
+  gpu_found_lost_pairs_capacity: 8388608
+  gpu_found_lost_aggregate_pairs_capacity: 67108864  
+  gpu_total_aggregate_pairs_capacity: 8388608
+  gpu_max_soft_body_contacts: 2097152
+  gpu_max_particle_contacts: 2097152
+  gpu_heap_capacity: 134217728  # 增大堆容量
+  gpu_temp_buffer_capacity: 33554432
+  gpu_max_num_partitions: 8
+
+# 渲染设置
+render:
+  # 渲染质量设置
+  anti_aliasing: 1
+  enable_shadows: true
+  enable_reflections: false  # 关闭反射提升性能
+  
+  # 相机设置
+  camera:
+    width: 1280
+    height: 720
+    fov: 60
+    near_clip: 0.1
+    far_clip: 1000.0
+
+# 场景生成设置（匹配env.py中的场景生成）
+scene:
+  # 地面设置
+  ground:
+    size: [100.0, 100.0]  # 地面大小
+    color: [0.1, 0.1, 0.1]  # 地面颜色
+    
+  # 光照设置  
+  lighting:
+    intensity: 3000.0
+    color: [0.75, 0.75, 0.75]
+    
+  # 建筑生成设置（匹配_create_unknown_buildings）
+  terrain:
+    horizontal_scale: 0.5
+    vertical_scale: 0.5
+    border_width: 5.0
+    obstacle_height_probability: [0.3, 0.3, 0.2, 0.1, 0.1]
+    obstacle_height_range: [3.0, 6.0, 10.0, 15.0, 20.0]
+
+# 调试设置
+debug:
+  enable_debug_vis: false  # 启用调试可视化
+  log_level: "INFO"
+  save_trajectories: false  # 保存轨迹用于分析
